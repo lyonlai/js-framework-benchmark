@@ -18,7 +18,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 public class App {
-	
+
 //    private final static String BINARY = "/Applications/Chromium.app/Contents/MacOS/Chromium";
     private final static String BINARY = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
     //private final static String BINARY = "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary";
@@ -34,9 +34,9 @@ public class App {
     	new Framework("cyclejs-v6.0.3"),
     	new Framework("cyclejs-v7.0.0"),
     	new Framework("domvm-v1.2.9"),
-    	new Framework("domvm-nowebpack"),
-        new Framework("ember-v2.6.1", "ember-v2.6.1/dist"),
+    	  new Framework("ember-v2.6.1", "ember-v2.6.1/dist"),
         new Framework("inferno-v0.7.13"),
+				new Framework("inferno-v0.7.26-mobX-v2.4.4"),
     	new Framework("kivi-v1.0.0-rc0"),
     	new Framework("mithril-v0.2.5"),
         new Framework("mithril-v1.0.0-alpha"),
@@ -44,10 +44,9 @@ public class App {
     	new Framework("preact-v4.8.0"),
     	new Framework("ractive-v0.7.3"),
     	new Framework("react-v0.14.8"),
-    	new Framework("react-v15.2.0"),
+    	new Framework("react-v15.3.0"),
     	new Framework("riot-v2.5.0"),
-        new Framework("react-v15.2.0-mobX-v2.3.3"),
-        new Framework("react-v15.2.0-mobX-v2.3.7"),
+        new Framework("react-v15.3.0-mobX-v2.4.2"),
     	new Framework("react-lite-v0.15.14"),
     	new Framework("tsers-v1.0.0"),
         new Framework("vanillajs"),
@@ -56,7 +55,7 @@ public class App {
         new Framework("vue-v1.0.26"),
         new Framework("vue-v2.0.0-beta1")
     };
-    
+
     private final static Bench[] benches = new Bench[] {
     	new BenchRun(),
     	new BenchReplaceAll(),
@@ -73,7 +72,7 @@ public class App {
     };
 
     public static int BINARY_VERSION = 0;
-    
+
     private static class BenchRun extends AbstractCPUBench {
         public void init(WebDriver driver, String url) {
             driver.get("localhost:8080/" + url + "/");
@@ -119,7 +118,7 @@ public class App {
         public String getDescription() {
             return "Duration for updating all 1000 rows of the table (with "+WARMUP_COUNT+" warmup iterations).";
         }
-        
+
         public String getPath() {
             return "02_replace1k";
         }
@@ -286,14 +285,14 @@ public class App {
             return "08_create1k-after10k";
         }
     }
-    
+
     private static class BenchClear extends AbstractCPUBench {
         public void init(WebDriver driver, String url) {
             driver.get("localhost:8080/" + url + "/");
             WebDriverWait wait = new WebDriverWait(driver, 10);
             WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id("runlots")));
             element.click();
-            
+
             wait.until(ExpectedConditions.elementToBeClickable(By.id("clear")));
         }
 
@@ -312,7 +311,7 @@ public class App {
             return "09_clear10k";
         }
     }
-    
+
     private static class BenchClear2nd extends AbstractCPUBench {
         public void init(WebDriver driver, String url) {
             driver.get("localhost:8080/" + url + "/");
@@ -343,7 +342,7 @@ public class App {
             return "10_clear-2nd-time10k";
         }
     }
-    
+
     private static class BenchReadyMemory extends AbstractMemoryBench {
         public void init(WebDriver driver, String url) {
             driver.get("localhost:8080/" + url + "/");
@@ -365,7 +364,7 @@ public class App {
             return "21_" + this.getName().replaceAll("(\\s+)", "-");
         }
     }
-    
+
     private static class BenchRunMemory extends AbstractMemoryBench {
         public void init(WebDriver driver, String url) {
             driver.get("localhost:8080/" + url + "/");
@@ -397,16 +396,16 @@ public class App {
 		int length = REPEAT_RUN;
 		for (Framework framework : frameworks) {
 			System.out.println(framework.framework);
-			
+
 			for (Bench bench : benches) {
 				System.out.println(bench.getName());
-				
+
 				ChromeDriver driver = new ChromeDriver(cap);
-				
+
 				try {
 					double[] data = new double[length];
 					double lastWait = 1000;
-					
+
 					for (int i = 0; i < length; i++) {
 						Double time = bench.run(driver, framework, lastWait);
 						if (time != null) {
@@ -414,14 +413,14 @@ public class App {
 							lastWait = data[i];
 						}
 					}
-					
+
 					System.out.println("before "+Arrays.toString(data));
 					if (DROP_WORST_RUN>0) {
 						Arrays.sort(data);
 						data = Arrays.copyOf(data, data.length-DROP_WORST_RUN);
 						System.out.println("after "+Arrays.toString(data));
 					}
-					
+
 					writeSummary(framework.framework, bench, data);
 				}
 				catch(Exception ex) {
@@ -433,22 +432,22 @@ public class App {
 			}
 		}
     }
-    
+
     private void writeSummary(String framework, Bench bench, double[] data) throws IOException {
     	NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
         nf.setMaximumFractionDigits(2);
         nf.setMinimumFractionDigits(2);
         nf.setGroupingUsed(false);
-        
+
         if (!Files.exists(Paths.get("results"))) {
             Files.createDirectories(Paths.get("results"));
         }
-        
+
         SummaryStatistics summary = new SummaryStatistics();
         for (int i = 0; i < data.length; i++) {
         	summary.addValue(data[i]);
         }
-        
+
         StringBuilder line = new StringBuilder();
         line.append("{");
         line.append("\n\t\"framework\": \"").append(framework).append("\"");
@@ -463,9 +462,9 @@ public class App {
         line.append(",\n\t\"standardDeviation\": ").append(nf.format(summary.getStandardDeviation()));
         line.append("\n}");
         System.out.println(line.toString());
-        
+
         Files.write(Paths.get("results", framework + "_" + bench.getPath() + ".json"), line.toString().getBytes("utf-8"));
-        
+
         System.out.println("==== Results for " + framework + "_" + bench.getPath() + " written to results directory");
     }
 
@@ -501,7 +500,7 @@ public class App {
 			}
         });
         System.out.println("Running with " + Paths.get(BINARY).getFileName() + " v" + BINARY_VERSION);
-        
+
         System.setProperty("webdriver.chrome.driver", "node_modules/webdriver-manager/selenium/chromedriver");
         App test = new App();
         test.runTests();
