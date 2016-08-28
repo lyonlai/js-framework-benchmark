@@ -69,6 +69,7 @@ export class Controller extends Component{
     update() {
         startMeasure("updater");
         this.props.store.update();
+        stopMeasure();
     }
     select(id) {
         startMeasure("select");
