@@ -2,8 +2,19 @@
 
 import Inferno from 'inferno'
 import Component from 'inferno-component'
-import {observer} from 'mobx-inferno';
-import {Row} from './row';
+import {connect} from 'inferno-redux';
+
+import {
+  buildData,
+  remove,
+  run,
+  add,
+  update,
+  select,
+  runLots,
+  clear,
+  swapRows
+} from './store';
 
 
 var startTime;
@@ -33,7 +44,32 @@ var stopMeasure = function() {
     }
 }
 
-@observer
+export class Row extends Component {
+    constructor(props) {
+        super(props);
+        this.click = this.click.bind(this);
+        this.del = this.del.bind(this);
+    }
+    click() {
+        this.props.onClick(this.props.data.get('id'));
+    }
+    del() {
+        this.props.onDelete(this.props.data.get('id'));
+    }
+
+    render() {
+        let {styleClass, onClick, onDelete, data} = this.props;
+        return (<tr className={styleClass}>
+            <td className="col-md-1">{data.get('id')}</td>
+            <td className="col-md-4">
+                <a onClick={this.click}>{data.get('label')}</a>
+            </td>
+            <td className="col-md-1"><a onClick={this.del}><span className="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+            <td className="col-md-6"></td>
+        </tr>);
+    }
+}
+
 export class Controller extends Component{
     constructor(props) {
         super(props);
@@ -60,46 +96,47 @@ export class Controller extends Component{
     }
     run() {
         startMeasure("run");
-        this.props.store.run();
+        this.props.run();
     }
     add() {
         startMeasure("add");
-        this.props.store.add();
+        this.props.add();
     }
     update() {
         startMeasure("updater");
-        this.props.store.update();
+        this.props.update();
     }
     select(id) {
         startMeasure("select");
-        this.props.store.select(id);
+        this.props.select(id);
     }
     delete(id) {
         startMeasure("delete");
-        this.props.store.delete(id);
+        this.props.remove(id);
     }
     runLots() {
         startMeasure("runLots");
-        this.props.store.runLots();
+        this.props.runLots();
     }
     clear() {
         startMeasure("clear");
-        this.props.store.clear();
+        this.props.clear();
     }
     swapRows() {
         startMeasure("swapRows");
-        this.props.store.swapRows();
+        this.props.swapRows();
     }
     render () {
-        var rows = this.props.store.data.map((d,i) => {
-            var className = d.id === this.props.store.selected ? 'danger':'';
-            return <Row key={d.id} data={d} onClick={this.select} onDelete={this.delete} styleClass={className}></Row>
-        });
+        var rows = this.props.data.map((d,i) => {
+            const id = d.get('id');
+            var className = id === this.props.selected ? 'danger':'';
+            return <Row key={id} data={d} onClick={this.select} onDelete={this.delete} styleClass={className}></Row>
+        }).toArray();
         return (<div className="container">
             <div className="jumbotron">
                 <div className="row">
                     <div className="col-md-6">
-                        <h1>Inferno v0.7.26 with MobX v2.4.4</h1>
+                        <h1>Inferno v0.7.26 Redux v3.5.2 Immutable-JS v3.8.1</h1>
                     </div>
                     <div className="col-md-6">
                         <div className="row">
@@ -132,3 +169,21 @@ export class Controller extends Component{
         </div>);
  }
 }
+
+export default connect(
+  state => ({
+    data: state.store.get('data'),
+    selected: state.store.get('selected')
+  }),
+  {
+    buildData: () => buildData(),
+    remove: id => remove(id),
+    run: () => run(),
+    add: () => add(),
+    update: () => update(),
+    select: id => select(id),
+    runLots: () => runLots(),
+    clear: () => clear(),
+    swapRows: () => swapRows()
+  }
+)(Controller);

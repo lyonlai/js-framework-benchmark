@@ -37,6 +37,7 @@ public class App {
     	  new Framework("ember-v2.6.1", "ember-v2.6.1/dist"),
         new Framework("inferno-v0.7.13"),
 				new Framework("inferno-v0.7.26-mobX-v2.4.4"),
+				new Framework("inferno-v0.7.26-redux-v3.5.2"),
     	new Framework("kivi-v1.0.0-rc0"),
     	new Framework("mithril-v0.2.5"),
         new Framework("mithril-v1.0.0-alpha"),
