@@ -39,11 +39,6 @@ module.exports = [{
 		root: [
 			__dirname,
 			__dirname + '/src'
-		],
-		alias: {
-			"inferno": __dirname+"/node_modules/inferno/dist/inferno.min.js",
-			"inferno-component": __dirname+"/node_modules/inferno/dist/inferno-component.min.js",
-			"inferno-dom": __dirname+"/node_modules/inferno/dist/inferno-dom.min.js",
-		}
+		]
 	}
 }];
