@@ -26,7 +26,7 @@ module.exports = [{
 		loaders: loaders
 	},
 	entry: {
-		main: './src/Main.jsx',
+		main: './src/main.es6.js',
 	},
 	output: {
 		path: './dist',
@@ -37,10 +37,6 @@ module.exports = [{
 		root: [
 			__dirname,
 			__dirname + '/src'
-		],
-		alias: {
-			"react": __dirname+"/node_modules/react/dist/react.min.js",
-			"react-dom": __dirname+"/node_modules/react-dom/dist/react-dom.min.js"
-		}
+		]
 	}
 }];
