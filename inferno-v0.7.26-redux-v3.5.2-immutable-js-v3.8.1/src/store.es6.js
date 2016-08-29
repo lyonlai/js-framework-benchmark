@@ -98,8 +98,8 @@ function buildData(count = 1000) {
 function dataStore(state = initialState, action) {
   switch (action.type) {
     case DELETE:
-      const index = state.findIndex(item => item.get('id') === action.id);
-      return state.delete(index);
+      const index = state.get('data').findIndex(item => item.get('id') === action.id);
+      return state.set('data', state.get('data').delete(index));
     case RUN:
       return state.withMutations(original => {
         original.set('data', buildData(1000));
