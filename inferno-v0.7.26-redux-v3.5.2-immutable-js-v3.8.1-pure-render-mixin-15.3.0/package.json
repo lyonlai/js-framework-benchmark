@@ -33,7 +33,7 @@
     "inferno-redux": "0.7.26",
     "immutable": "v3.8.1",
     "react": "15.3.1",
-    "react-addons-shallow-compare": "15.3.1",
+    "react-addons-shallow-compare": "15.3.0",
     "redux": "3.5.2"
   }
 }

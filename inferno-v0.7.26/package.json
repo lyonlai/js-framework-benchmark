@@ -27,8 +27,8 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "inferno": "0.7.13",
-    "inferno-component": "0.7.13",
-    "inferno-dom": "0.7.13"
+    "inferno": "0.7.26",
+    "inferno-component": "0.7.26",
+    "inferno-dom": "0.7.26"
   }
 }
