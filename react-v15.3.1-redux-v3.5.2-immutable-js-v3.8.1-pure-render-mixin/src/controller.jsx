@@ -140,7 +140,7 @@ export class Controller extends React.Component{
             <div className="jumbotron">
                 <div className="row">
                     <div className="col-md-6">
-                        <h1>Inferno v0.7.26 Redux v3.5.2 Immutable-JS v3.8.1 Pure Render Mixin</h1>
+                        <h1>React v15.3.1 with Redux v3.5.2 Immutable-JS v3.8.1 Pure Render Mixin</h1>
                     </div>
                     <div className="col-md-6">
                         <div className="row">

@@ -134,7 +134,7 @@ export class Controller extends React.Component{
             <div className="jumbotron">
                 <div className="row">
                     <div className="col-md-6">
-                        <h1>React v15.3.0 with Redux v3.5.2</h1>
+                        <h1>React v15.3.1 with Redux v3.5.2</h1>
                     </div>
                     <div className="col-md-6">
                         <div className="row">
