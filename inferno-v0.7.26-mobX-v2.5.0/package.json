@@ -33,7 +33,7 @@
     "inferno-component": "0.7.26",
     "inferno-create-class": "^0.7.26",
     "inferno-dom": "0.7.26",
-    "mobx": "2.4.4",
+    "mobx": "2.5.0",
     "mobx-inferno": "0.2.0"
   }
 }
